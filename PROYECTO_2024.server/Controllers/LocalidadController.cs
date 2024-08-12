@@ -3,6 +3,7 @@ using PROYECTO_2024.BD.DATA.ENTITY;
 using PROYECTO_2024.BD.DATA;
 using Microsoft.EntityFrameworkCore;
 using PROYECTO_2024.Shared.DTO;
+using AutoMapper;
 
 namespace PROYECTO_2024.server.Controllers
 {
@@ -12,10 +13,13 @@ namespace PROYECTO_2024.server.Controllers
     public class LocalidadController : ControllerBase
     {
         private readonly Context context;
+        private readonly IMapper mapper;
 
-        public LocalidadController(Context context)
+        public LocalidadController(Context context,
+                                       IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper; 
         }
         //
         [HttpGet]
@@ -63,14 +67,15 @@ namespace PROYECTO_2024.server.Controllers
         /// //////////////////////////////////////////////////////////////////////////
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(CrearLocalidadDTO entidadDTO)
+        public async Task<ActionResult<int>> Post([FromBody] CrearLocalidadDTO entidadDTO)// Mapper mapper)
         {
             try
             {
-                Localidad entidad = new Localidad();
-                entidad.codigo= entidadDTO.codigo;
-                entidad.Nombre= entidadDTO.Nombre;  
+                ////Localidad entidad = new Localidad();
+                ////entidad.codigo= entidadDTO.codigo;
+                ////entidad.Nombre= entidadDTO.Nombre;  
 
+                Localidad entidad = mapper.Map<Localidad> (entidadDTO);
 
                 context.Localidades.Add(entidad);
                 await context.SaveChangesAsync();
